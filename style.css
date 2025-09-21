@@ -1,0 +1,36 @@
+* { box-sizing: border-box; }
+body { font-family: system-ui, Arial, sans-serif; margin: 16px; background: #f5f6f8; color: #222; }
+h1 { text-align: center; margin-bottom: 12px; }
+
+#teams {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 0 auto 12px;
+  max-width: 1200px;
+}
+
+.team {
+  background: #fff;
+  border: 2px solid #222;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+.team h2 { margin: 0 0 6px; outline: none; }
+.stat { margin: 4px 0; font-weight: 600; }
+.controls button { margin: 4px; padding: 8px 10px; cursor: pointer; }
+
+#actions {
+  display: flex; gap: 10px; align-items: center; justify-content: center;
+  margin: 8px 0 12px;
+}
+#actions select, #actions button { padding: 8px 10px; }
+
+#log {
+  background: #111; color: #0f0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 10px; border-radius: 8px; max-width: 1000px; margin: 0 auto; min-height: 120px; max-height: 280px; overflow-y: auto;
+  box-shadow: inset 0 0 0 2px #000;
+}
+
+button:disabled { opacity: 0.5; cursor: not-allowed; }
