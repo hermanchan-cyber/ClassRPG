@@ -1,69 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Classroom Battle (MVP)</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forest Arena — 16-bit Classroom RPG</title>
+  <link rel="preload" href="styles.css" as="style">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><text y='50' font-size='50'>🌲</text></svg>">
 </head>
 <body>
-  <h1>Classroom Battle</h1>
-
-  <div id="teams">
-    <div class="team" data-id="1">
-      <h2 contenteditable="true" spellcheck="false">Team 1</h2>
-      <div class="stat">HP: <span id="hp1">100</span></div>
-      <div class="stat">XP: <span id="xp1">0</span></div>
-      <div class="controls">
-        <button onclick="attack(1)">Attack</button>
-        <button onclick="useItem(1)" disabled>Use Item</button>
-      </div>
+  <header class="topbar">
+    <h1>Forest Arena <span class="muted">— 16-bit vibes</span></h1>
+    <div class="controls">
+      <button id="newGame" class="danger">New Game</button>
+      <button id="healAll" class="secondary">Heal All</button>
+      <button id="settingsBtn" class="secondary">Settings</button>
+      <button id="exportBtn" class="secondary">Export Save</button>
+      <label class="secondary filelbl">
+        Import <input id="importFile" type="file" accept="application/json">
+      </label>
     </div>
+  </header>
 
-    <div class="team" data-id="2">
-      <h2 contenteditable="true" spellcheck="false">Team 2</h2>
-      <div class="stat">HP: <span id="hp2">100</span></div>
-      <div class="stat">XP: <span id="xp2">0</span></div>
-      <div class="controls">
-        <button onclick="attack(2)">Attack</button>
-        <button onclick="useItem(2)" disabled>Use Item</button>
-      </div>
-    </div>
+  <main class="layout">
+    <!-- Squad grid (left column) -->
+    <section class="squadGrid" id="squadGrid"></section>
 
-    <div class="team" data-id="3">
-      <h2 contenteditable="true" spellcheck="false">Team 3</h2>
-      <div class="stat">HP: <span id="hp3">100</span></div>
-      <div class="stat">XP: <span id="xp3">0</span></div>
-      <div class="controls">
-        <button onclick="attack(3)">Attack</button>
-        <button onclick="useItem(3)" disabled>Use Item</button>
+    <!-- Arena (right column) -->
+    <section class="arena">
+      <div class="field" id="field">
+        <div class="parallax back"></div>
+        <div class="parallax mid"></div>
+        <div class="side left" id="leftSide"></div>
+        <div class="side right" id="rightSide"></div>
       </div>
-    </div>
 
-    <div class="team" data-id="4">
-      <h2 contenteditable="true" spellcheck="false">Team 4</h2>
-      <div class="stat">HP: <span id="hp4">100</span></div>
-      <div class="stat">XP: <span id="xp4">0</span></div>
-      <div class="controls">
-        <button onclick="attack(4)">Attack</button>
-        <button onclick="useItem(4)" disabled>Use Item</button>
+      <div class="hudBar">
+        <div id="status" class="status pill">Pick an attacker, then choose a target. (Use “Cancel” to undo.)</div>
+        <div class="actionRow">
+          <button id="cancelPick" class="secondary" disabled>Cancel</button>
+          <button id="attackBtn" class="primary" disabled>Attack</button>
+        </div>
       </div>
+
+      <div class="log" id="log"></div>
+
+      <!-- Optional Spotify player dock -->
+      <div class="spotifyDock" id="spotifyDock" hidden>
+        <div class="row">
+          <strong>Music</strong>
+          <button id="spotifyToggle" class="secondary small">Hide</button>
+        </div>
+        <div class="row"><button id="spotifyStart" class="primary small">Start Playlist</button></div>
+        <div id="spotifyEmbedWrap"></div>
+        <div class="hint muted">Tip: You may need to tap “Start Playlist” once due to browser autoplay rules.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Overlay flash (tap to dismiss) -->
+  <div class="overlay" id="overlay">
+    <div class="flashCard">
+      <div id="flashBig" class="flashBig">−10</div>
+      <div id="flashSub" class="flashSub">Damage</div>
+      <div class="hint pill">Tap anywhere to continue</div>
     </div>
   </div>
 
-  <div id="actions">
-    <label>Choose Target:
-      <select id="targetSelect">
-        <option value="2">Team 2</option>
-        <option value="3">Team 3</option>
-        <option value="4">Team 4</option>
-      </select>
-    </label>
-    <button id="resetBtn" onclick="hardReset()">Reset Game</button>
-  </div>
+  <!-- Settings modal -->
+  <dialog id="settingsDlg">
+    <form method="dialog" class="settings">
+      <h2>Settings</h2>
+      <label class="row">
+        <span>Sound effects</span>
+        <input type="checkbox" id="sfxToggle" checked>
+      </label>
+      <label class="row">
+        <span>Spotify Playlist URL (optional)</span>
+        <input id="playlistUrl" type="url" placeholder="https://open.spotify.com/playlist/…">
+      </label>
+      <div class="row">
+        <button id="saveSettings" class="primary">Save</button>
+        <button value="cancel" class="secondary">Close</button>
+      </div>
+      <p class="muted small">Note: Autoplay control of Spotify isn’t allowed via code. Use the “Start Playlist” button to begin playback.</p>
+    </form>
+  </dialog>
 
-  <div id="log"></div>
+  <audio id="sfx1" preload="auto"></audio>
+  <audio id="sfx2" preload="auto"></audio>
+  <audio id="sfx3" preload="auto"></audio>
 
-  <script src="script.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
