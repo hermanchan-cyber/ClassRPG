@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classroom Battle (MVP)</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Classroom Battle</h1>
+
+  <div id="teams">
+    <div class="team" data-id="1">
+      <h2 contenteditable="true" spellcheck="false">Team 1</h2>
+      <div class="stat">HP: <span id="hp1">100</span></div>
+      <div class="stat">XP: <span id="xp1">0</span></div>
+      <div class="controls">
+        <button onclick="attack(1)">Attack</button>
+        <button onclick="useItem(1)" disabled>Use Item</button>
+      </div>
+    </div>
+
+    <div class="team" data-id="2">
+      <h2 contenteditable="true" spellcheck="false">Team 2</h2>
+      <div class="stat">HP: <span id="hp2">100</span></div>
+      <div class="stat">XP: <span id="xp2">0</span></div>
+      <div class="controls">
+        <button onclick="attack(2)">Attack</button>
+        <button onclick="useItem(2)" disabled>Use Item</button>
+      </div>
+    </div>
+
+    <div class="team" data-id="3">
+      <h2 contenteditable="true" spellcheck="false">Team 3</h2>
+      <div class="stat">HP: <span id="hp3">100</span></div>
+      <div class="stat">XP: <span id="xp3">0</span></div>
+      <div class="controls">
+        <button onclick="attack(3)">Attack</button>
+        <button onclick="useItem(3)" disabled>Use Item</button>
+      </div>
+    </div>
+
+    <div class="team" data-id="4">
+      <h2 contenteditable="true" spellcheck="false">Team 4</h2>
+      <div class="stat">HP: <span id="hp4">100</span></div>
+      <div class="stat">XP: <span id="xp4">0</span></div>
+      <div class="controls">
+        <button onclick="attack(4)">Attack</button>
+        <button onclick="useItem(4)" disabled>Use Item</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="actions">
+    <label>Choose Target:
+      <select id="targetSelect">
+        <option value="2">Team 2</option>
+        <option value="3">Team 3</option>
+        <option value="4">Team 4</option>
+      </select>
+    </label>
+    <button id="resetBtn" onclick="hardReset()">Reset Game</button>
+  </div>
+
+  <div id="log"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
